@@ -12,3 +12,17 @@ services:
       - ./:/usr/src/app
     ports:
       - 8080:8000
+  db:
+    image: mysql:8.0.35
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: wakarunDB
+      MYSQL_USER: wakarun
+      MYSQL_PASSWORD: 2024autumn
+    restart: always
+    
+
+    
+
