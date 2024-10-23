@@ -3,7 +3,7 @@ services:
     restart: always
     build:
       context: .
-      dockerfile: ./Dockerfile
+      dockerfile: ./infra/local/Dockerfile
     container_name: 'app'
     working_dir: '/usr/src/app'
     tty: true
@@ -21,7 +21,5 @@ services:
       MYSQL_USER: wakarun
       MYSQL_PASSWORD: 2024autumn
     restart: always
-    
-
-    
-
+    volumes:
+      - ./infra/local/db_data:/var/lib/mysql
