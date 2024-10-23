@@ -17,4 +17,4 @@ RUN pip install --upgrade setuptools
 RUN pip install --no-cache-dir -r requirements.txt
 RUN python -m pip install uvicorn uvicorn-worker gunicorn
 
-CMD ["python", "-m", "gunicorn", "Wakarun.asgi:application", "-k", "uvicorn_worker.UvicornWorker", "-b", "0.0.0.0:80"]
+CMD ["python", "-m", "gunicorn", "wakarun.asgi:application", "-k", "uvicorn_worker.UvicornWorker", "-b", "0.0.0.0:80"]
