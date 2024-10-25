@@ -1,9 +1,18 @@
 services:
+  web:
+    restart: always
+    build:
+      context: .
+      dockerfile: ./infra/local/web/Dockerfile
+    container_name: 'web'
+    tty: true
+    ports:
+      - 8000:80
   app:
     restart: always
     build:
       context: .
-      dockerfile: ./infra/local/Dockerfile
+      dockerfile: ./infra/local/app/Dockerfile
     container_name: 'app'
     working_dir: '/usr/src/app'
     tty: true
