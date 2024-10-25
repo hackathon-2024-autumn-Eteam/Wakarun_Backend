@@ -8,3 +8,5 @@ class Questions(models.Model):
     type = models.IntegerField()
     create_at = models.DateTimeField()
     updated_at = models.DateTimeField()
+    def __str__(self):
+        return self.content
