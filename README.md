@@ -1,7 +1,11 @@
 # Wakarun-Backend
 
 ## ローカル開発環境構築
-1.docker-composeでpython環境を作成する。
+1.DBのデータ保存用のディレクトリを作成する。
+```
+mkdir -p infra/local/db-data
+```
+2.docker-composeでpython環境を作成する。
 ```
 docker-compose up -d
 ```
