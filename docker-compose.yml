@@ -1,6 +1,5 @@
 services:
   web:
-    restart: always
     build:
       context: .
       dockerfile: ./infra/local/web/Dockerfile
@@ -8,6 +7,9 @@ services:
     tty: true
     ports:
       - 8000:80
+    environment:
+      ACCESS_LOG_LOCATION: /var/log/nginx/access.log
+      PROXY_PASS_HTTP: http://app:8000
   app:
     restart: always
     build:
