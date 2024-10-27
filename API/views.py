@@ -1,5 +1,12 @@
-from django.http import HttpResponse
+from API.models import Questions, Answers, Favorites
+from rest_framework import permissions, viewsets
+
+from API.serializers import QuestionsSerializer, AnswersSerializer, FavoritesSerializer
 
 
-def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
+class QuestionsViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = Questions.objects.all()
+    serializer_class = QuestionsSerializer
