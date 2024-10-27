@@ -3,6 +3,7 @@ FROM python:3.12.7-slim
 RUN apt-get update
 RUN apt-get -y install locales && \
     localedef -f UTF-8 -i ja_JP ja_JP.UTF-8
+RUN apt-get install -y default-libmysqlclient-dev build-essential pkg-config
 
 ENV LANG ja_JP.UTF-8
 ENV LANGUAGE ja_JP:ja
@@ -17,4 +18,4 @@ RUN pip install --upgrade setuptools
 RUN pip install --no-cache-dir -r requirements.txt
 RUN python -m pip install uvicorn uvicorn-worker gunicorn
 
-CMD ["python", "-m", "gunicorn", "wakarun.asgi:application", "-k", "uvicorn_worker.UvicornWorker", "-b", "0.0.0.0:80"]
+CMD ["python", "-m", "gunicorn", "wakarun.asgi:application", "-k", "uvicorn_worker.UvicornWorker", "-b", "0.0.0.0:8000"]
