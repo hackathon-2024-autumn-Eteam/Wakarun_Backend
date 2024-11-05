@@ -1,18 +1,25 @@
-from API.models import Questions,Answers,Favorites
+from API.models import Users, Questions
 from rest_framework import serializers
 
+#タイムライン記事リスト取得
 
-class QuestionsSerializer(serializers.HyperlinkedModelSerializer):
+class UsersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Users
+        fields = ['user_name', 'user_icon']
+
+class QuestionsSerializer(serializers.ModelSerializer):
+    user = UsersSerializer()
     class Meta:
         model = Questions
-        fields = ['id', 'user_id', 'content', 'type', 'create_at', 'updated_at']
+        fields = ['id', 'user', 'title', 'content', 'type']
 
-class AnswersSerializer(serializers.HyperlinkedModelSerializer):
-    class meta:
-        model = Answers
-        fields = ['id', 'question_id', 'content', 'is_true']
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        user_name = representation['user']['user_name']
+        user_icon = representation['user']['user_icon']
+        representation.pop('user')
+        representation['user_name'] = user_name
+        representation['user_icon'] = user_icon
 
-class FavoritesSerializer(serializers.HyperlinkedModelSerializer):
-    class meta:
-        model = Favorites
-        fields = ['user_id', 'question_id', 'registered_at']
+        return representation 

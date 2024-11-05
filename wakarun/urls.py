@@ -20,11 +20,12 @@ from rest_framework import routers
 
 from API import views
 
-router = routers.DefaultRouter()
-router.register(r'questions', views.QuestionsViewSet)
+# router = routers.DefaultRouter()
+# router.register(r'questions', views.QuestionsViewSet)
 
 urlpatterns = [
+# path('', include(router.urls)),
     path("api/", include("API.urls")),
     path("admin/", admin.site.urls),
-    path('', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
