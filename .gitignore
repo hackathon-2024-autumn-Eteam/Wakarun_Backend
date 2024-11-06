@@ -1,2 +1,3 @@
 infra/local/db_data/**
+infra/local/db_data2/**
 **/__pycache__/**
