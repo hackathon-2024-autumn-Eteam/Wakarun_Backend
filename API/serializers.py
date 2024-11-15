@@ -1,11 +1,11 @@
-from API.models import Users, Questions
+from API.models import CustomUser, Questions
 from rest_framework import serializers
 
 #タイムライン記事リスト取得
 
 class UsersSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Users
+        model = CustomUser
         fields = ['user_name', 'user_icon']
 
 class QuestionsSerializer(serializers.ModelSerializer):

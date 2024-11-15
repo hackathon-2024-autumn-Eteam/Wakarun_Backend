@@ -1,4 +1,6 @@
-from API.models import Users, Questions, Answers, Favorites
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponse
+from API.models import CustomUser, Questions, Answers, Favorites
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
