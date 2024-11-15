@@ -35,7 +35,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 class Questions(models.Model):
     id = models.CharField(max_length=64, primary_key=True)
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='CustomUser', null=True)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='questions', null=True)
     title = models.CharField(max_length=255, default='未設定')
     content = models.TextField()
     type = models.IntegerField()
