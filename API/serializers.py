@@ -1,5 +1,6 @@
 from API.models import CustomUser, Questions
 from rest_framework import serializers
+import uuid
 
 #タイムライン記事リスト取得
 
@@ -23,3 +24,15 @@ class QuestionsSerializer(serializers.ModelSerializer):
         representation['user_icon'] = user_icon
 
         return representation 
+
+#サインアップ機能
+class RegisterSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CustomUser
+        fields = ['user_name', 'email', 'password']
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def create(self, validated_data):
+        user = CustomUser.objects.create_user(**validated_data)
+        return user
