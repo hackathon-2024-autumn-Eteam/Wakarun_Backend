@@ -1,6 +1,5 @@
 from API.models import CustomUser, Questions
 from rest_framework import serializers
-import uuid
 
 #タイムライン記事リスト取得
 
@@ -36,3 +35,5 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = CustomUser.objects.create_user(**validated_data)
         return user
+    
+#サインイン機能
