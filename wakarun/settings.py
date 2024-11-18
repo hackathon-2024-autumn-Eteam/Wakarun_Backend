@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import os
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -27,7 +28,7 @@ SECRET_KEY = 'django-insecure-sn*06)^_&(4i5jk3b8hy2@^mzvr9a%fij9%zp-9p97%4ordq^0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost',]
+ALLOWED_HOSTS = [os.getenv('ALLOWED_HOST','localhost')]
 
 
 # Application definition
@@ -81,11 +82,11 @@ WSGI_APPLICATION = 'wakarun.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'wakarunDB',
-        'USER': 'root',
-        'PASSWORD': 'rootpass',
-        'HOST': 'db',
-        'PORT': '3306',
+        'NAME': os.getenv('DB_NAME','wakarunDB'),
+        'USER': os.getenv('DB_USER','root'),
+        'PASSWORD': os.getenv('DB_PASSWORD','rootpass'),
+        'HOST': os.getenv('DB_HOST', 'db'),
+        'PORT': os.getenv('DB_PORT','3306'),
     }
 }
 

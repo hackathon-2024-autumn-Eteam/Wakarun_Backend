@@ -8,9 +8,10 @@ admin.site.register(Favorites)
 
 class CustomUserAdmin(admin.ModelAdmin):
     
-    list_display = ('email', 'user_name') 
+    list_display = ('id','email', 'user_name') 
+    readonly_fields = ['id']
     fieldsets = (
-        (None, {'fields': ('email', 'user_name', 'password')}),
+        (None, {'fields': ('id','email', 'user_name', 'password')}),
         ('Permissions', {'fields': ('is_staff', 'is_active', 'is_superuser')}),
     )
     add_fieldsets = (
