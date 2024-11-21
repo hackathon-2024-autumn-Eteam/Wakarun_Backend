@@ -29,3 +29,7 @@ class RegisterView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
+#問題作成機能
+    class CreateQuestionView(APIView):
+        def post(self, request, *args, **kwargs):
+            
