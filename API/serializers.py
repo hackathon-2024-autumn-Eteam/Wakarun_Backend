@@ -34,10 +34,18 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = CustomUser.objects.create_user(**validated_data)
         return user
-    
+
 #問題作成機能
-class AnswerSerializer(serializers.ModelSerializer):
+class CreateAnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Answers
         fields = ['content', 'is_true']
+
+
+class CreateQuestionSirializer(serializers.ModelSerializer):
+    answers = CreateAnswerSerializer(many=True)
+
+    class Meta:
+        model =Questions
+        fields = ['title', 'content', 'type', 'answers']
         
