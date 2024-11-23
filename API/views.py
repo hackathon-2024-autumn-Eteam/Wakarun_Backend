@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from API.serializers import(
     QuestionsSerializer, RegisterSerializer, 
-    CreateQuestionSirializer, CreateAnswerSerializer
+    CreateQuestionSerializer, CreateAnswerSerializer
 )
 
 #タイムライン記事リスト取得
@@ -32,10 +32,27 @@ class RegisterView(APIView):
     
 
 #問題作成機能
-    class CreateQuestionView(APIView):
-        permission_classes = [IsAuthenticated]  #認証されたユーザーのみがアクセス可能
+class CreateQuestionView(APIView):
+    # permission_classes = [IsAuthenticated]  #認証されたユーザーのみがアクセス可能
 
-        def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
+        question_serializer = CreateQuestionSerializer(data=request.data, context={'request': request})
 
-            resp = {}
-            return Response(resp, status.HTTP_200_OK)
+        if question_serializer.is_valid():
+            # 問題を保存
+            question = question_serializer.save()
+
+            # 問題が記述式か選択式かに応じて解答を処理
+            for answer_data in request.data.get('submit_answers', []):
+                # 記述式の場合、is_trueはNone
+                if question.type == 1: # 記述式
+                    answer_data['is_true'] = None # is_trueはnullに設定
+                
+                #解答をシリアライズ
+                answer_serializer = CreateAnswerSerializer(data=answer_data)
+                if answer_serializer.is_valid():
+                    answer_serializer.save(question_id=question.id) #解答を問題に関連づけて保存
+                else:
+                    return Response(answer_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(question_serializer.data, status=status.HTTP_201_CREATED)
+        return Response(question_serializer.errors, status=status.HTTP_400_BAD_REQUEST)

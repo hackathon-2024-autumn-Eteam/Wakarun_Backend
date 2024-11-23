@@ -39,13 +39,35 @@ class RegisterSerializer(serializers.ModelSerializer):
 class CreateAnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Answers
-        fields = ['content', 'is_true']
+        fields = ['id', 'content', 'is_true', 'answers']
+        # extra_kwargs = {'question': {'read_only': True}}
+    
+    def validate(self, data):
+        question = self.context['question']  # context から question を取得
+        question_type = question.type
 
+        if question_type == 1:
+            data['is_true'] = None # 記述式の場合、is_true は null に設定
+        
+        # 選択式の場合、is_true は必須
+        elif question_type == 2:
+            if data.get('is_true') is None:
+                raise serializers.ValidationError('選択肢には正誤判定が必要です')
+        return data
 
-class CreateQuestionSirializer(serializers.ModelSerializer):
+class CreateQuestionSerializer(serializers.ModelSerializer):
     answers = CreateAnswerSerializer(many=True)
 
     class Meta:
         model =Questions
-        fields = ['title', 'content', 'type', 'answers']
-        
+        fields = ['title', 'content', 'type', 'answers', 'question']
+    
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+
+        # 問題が選択式の場合、選択肢を含める
+        if instance.type == 2: # 問題が選択式の場合
+            for answer in representation['answers']:
+                answer['content'] = answer.get('content') #選択式の内容を返す
+
+        return representation
