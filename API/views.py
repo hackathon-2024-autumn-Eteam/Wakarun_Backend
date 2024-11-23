@@ -1,11 +1,13 @@
-from django.shortcuts import get_object_or_404
-from django.http import HttpResponse
 from API.models import CustomUser, Questions, Answers, Favorites
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
-from API.serializers import QuestionsSerializer, RegisterSerializer
+from API.serializers import(
+    QuestionsSerializer, RegisterSerializer, 
+    CreateQuestionSirializer, CreateAnswerSerializer
+)
 
 #タイムライン記事リスト取得
 class TimelineView(APIView):
@@ -29,3 +31,11 @@ class RegisterView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
+#問題作成機能
+    class CreateQuestionView(APIView):
+        permission_classes = [IsAuthenticated]  #認証されたユーザーのみがアクセス可能
+
+        def post(self, request, *args, **kwargs):
+
+            resp = {}
+            return Response(resp, status.HTTP_200_OK)
