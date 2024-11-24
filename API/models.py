@@ -35,7 +35,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return self.email
 
 class Questions(models.Model):
-    id = models.CharField(max_length=64, primary_key=True)
+    id = models.UUIDField(primary_key=True,  default=uuid.uuid4, editable=False)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='questions', null=True)
     title = models.CharField(max_length=255, default='未設定')
     content = models.TextField()
@@ -46,10 +46,10 @@ class Questions(models.Model):
         return self.title
     
 class Answers(models.Model):
-    id = models.CharField(max_length=64, primary_key=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     question_id = models.ForeignKey(Questions, on_delete=models.CASCADE, related_name='answers')
     content = models.TextField()
-    is_true = models.BooleanField()
+    is_true = models.BooleanField(null=True, blank=True) # 記述式の場合は不要、選択式の場合のみ使用
     def __str__(self):
         return self.content
 

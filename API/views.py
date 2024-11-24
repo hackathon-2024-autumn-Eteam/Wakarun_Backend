@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from API.serializers import(
     QuestionsSerializer, RegisterSerializer, 
-    CreateQuestionSirializer, CreateAnswerSerializer
+    CreateQuestionSerializer,
 )
 
 #タイムライン記事リスト取得
@@ -32,10 +32,16 @@ class RegisterView(APIView):
     
 
 #問題作成機能
-    class CreateQuestionView(APIView):
-        permission_classes = [IsAuthenticated]  #認証されたユーザーのみがアクセス可能
+class CreateQuestionView(APIView):
 
-        def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
+        serializer = CreateQuestionSerializer(data=request.data)
 
-            resp = {}
-            return Response(resp, status.HTTP_200_OK)
+        if serializer.is_valid():
+            question = serializer.save()
+            return Response({
+                'status': '200',
+                'message': '問題文が作成されました。',
+                'id': question.id
+            }, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

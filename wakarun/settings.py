@@ -34,6 +34,7 @@ ALLOWED_HOSTS = [os.getenv('ALLOWED_HOST','localhost')]
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     "API.apps.ApiConfig",
     'django.contrib.admin',
     'django.contrib.auth',
@@ -43,8 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
-    'health_check'
-    'corsheaders',
+    'health_check',
 ]
 
 MIDDLEWARE = [
