@@ -3,10 +3,12 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.renderers import JSONRenderer
 
 from API.serializers import(
     QuestionsSerializer, RegisterSerializer, 
     CreateQuestionSerializer,
+    CreateAnswersSerializer
 )
 
 #タイムライン記事リスト取得
@@ -43,5 +45,19 @@ class CreateQuestionView(APIView):
                 'status': '200',
                 'message': '問題文が作成されました。',
                 'id': question.id
+            }, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CreateAnswersView(APIView):
+
+    def post(self, request, *args, **kwargs):
+        serializer = CreateAnswersSerializer(data=request.data, many=True)
+
+        if serializer.is_valid():
+            answer= serializer.save()
+            return Response({
+                'status': '200',
+                'message': '解答が作成されました。',
+                'answer': JSONRenderer().render(serializer.data)
             }, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
