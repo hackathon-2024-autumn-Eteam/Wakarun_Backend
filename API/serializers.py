@@ -34,40 +34,27 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = CustomUser.objects.create_user(**validated_data)
         return user
-
-#問題作成機能
-class CreateAnswerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Answers
-        fields = ['id', 'content', 'is_true', 'answers']
-        # extra_kwargs = {'question': {'read_only': True}}
     
-    def validate(self, data):
-        question = self.context['question']  # context から question を取得
-        question_type = question.type
-
-        if question_type == 1:
-            data['is_true'] = None # 記述式の場合、is_true は null に設定
-        
-        # 選択式の場合、is_true は必須
-        elif question_type == 2:
-            if data.get('is_true') is None:
-                raise serializers.ValidationError('選択肢には正誤判定が必要です')
-        return data
-
+#問題文作成機能
 class CreateQuestionSerializer(serializers.ModelSerializer):
-    answers = CreateAnswerSerializer(many=True)
+    user = serializers.UUIDField()  # クライアントからUUIDとしてユーザーIDを受け取る
 
     class Meta:
-        model =Questions
-        fields = ['title', 'content', 'type', 'answers', 'question']
+        model = Questions
+        fields = ['user', 'title', 'content', 'type']
+
+    def validate_user(self, value):
+        """
+        UUID形式のユーザーIDを検証し、対応するユーザーを取得する。
+        """
+        try:
+            user = CustomUser.objects.get(id=value)  # UUIDからCustomUserを取得
+        except CustomUser.DoesNotExist:
+            raise serializers.ValidationError("指定されたユーザーは存在しません。")
+        return user  # CustomUserインスタンスを返す
     
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-
-        # 問題が選択式の場合、選択肢を含める
-        if instance.type == 2: # 問題が選択式の場合
-            for answer in representation['answers']:
-                answer['content'] = answer.get('content') #選択式の内容を返す
-
-        return representation
+    def create(self, validated_data):
+        # バリデーション済みのCustomUserインスタンスを取得
+        user = validated_data.pop('user')
+        question = Questions.objects.create(user=user, **validated_data)
+        return question
