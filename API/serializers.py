@@ -54,7 +54,5 @@ class CreateQuestionSerializer(serializers.ModelSerializer):
         return user  # CustomUserインスタンスを返す
     
     def create(self, validated_data):
-        # バリデーション済みのCustomUserインスタンスを取得
-        user = validated_data.pop('user')
-        question = Questions.objects.create(user=user, **validated_data)
+        question = Questions.objects.create(**validated_data)
         return question
