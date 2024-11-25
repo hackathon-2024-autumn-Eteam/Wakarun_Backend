@@ -56,3 +56,49 @@ class CreateQuestionSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         question = Questions.objects.create(**validated_data)
         return question
+
+
+#解答作成機能(many=Trueで呼び出した場合、CreateListAnswerSerializerがよばれる)
+class CreateListAnswersSerializer(serializers.ListSerializer):
+    def create(self, validated_data):
+        answers = [Answers(**item) for item in validated_data]
+        return Answers.objects.bulk_create(answers)
+
+    def validate(self, data):
+        # 解答を３つ以上登録しようとしたらエラー
+        if len(data) > 3 :
+            raise serializers.ValidationError("Questionに対してAnswerを３つ以上登録することはできません。")
+
+        # 正解を2つ以上登録しようとしたらエラー
+        true_count = 0
+        for item in data:
+            if item['is_true'] == True :
+                true_count += 1
+
+        if true_count > 1:
+            raise serializers.ValidationError("正解は１つまでしか設定することができません")
+
+class CreateAnswersSerializer(serializers.ModelSerializer):
+    # クライアントからUUIDとしてユーザーIDを受け取る
+    question_id = serializers.UUIDField()  
+
+    class Meta:
+        model = Answers
+        fields = ['question_id', 'content', 'is_true']
+        list_serializer_class = CreateListAnswersSerializer
+
+    def validate_question_id(self, value):
+        """
+        UUID形式のユーザーIDを検証し、対応するユーザーを取得する。
+        """
+        try:
+            # UUIDからQuestionを取得
+            question = Questions.objects.get(id=value)  
+        except Questions.DoesNotExist:
+            raise serializers.ValidationError("指定されたユーザーは存在しません。")
+        # Questionインスタンスを返す
+        return question  
+    
+    def create(self, validated_data):
+        answer = Answers.objects.create(**validated_data)
+        return answer
