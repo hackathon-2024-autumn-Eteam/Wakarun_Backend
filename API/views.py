@@ -54,7 +54,7 @@ class CreateAnswersView(APIView):
         serializer = CreateAnswersSerializer(data=request.data, many=True)
 
         if serializer.is_valid():
-            answer= serializer.save()
+            answer = serializer.save()
             return Response({
                 'status': '200',
                 'message': '解答が作成されました。',

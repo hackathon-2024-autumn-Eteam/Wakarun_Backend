@@ -77,6 +77,8 @@ class CreateListAnswersSerializer(serializers.ListSerializer):
 
         if true_count > 1:
             raise serializers.ValidationError("正解は１つまでしか設定することができません")
+        
+        return data
 
 class CreateAnswersSerializer(serializers.ModelSerializer):
     # クライアントからUUIDとしてユーザーIDを受け取る
