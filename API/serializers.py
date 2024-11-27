@@ -102,3 +102,11 @@ class CreateAnswersSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         answer = Answers.objects.create(**validated_data)
         return answer
+
+#問題に解答する（正答を表示する）機能
+class AnswersSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Answers
+        fields = ['content']
+        
