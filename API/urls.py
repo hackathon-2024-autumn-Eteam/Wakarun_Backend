@@ -10,4 +10,5 @@ urlpatterns = [
     path('signup/', views.RegisterView.as_view(), name='signup'),
     path('questions/', views.CreateQuestionView.as_view(), name='questions'),
     path('answers/', views.CreateAnswersView.as_view(), name='questions'),
-]
+    path('get-answer/', views.AnswersView.as_view(), name='get_answer'),
+    ]
