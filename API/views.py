@@ -14,7 +14,7 @@ from API.serializers import(
 #タイムライン記事リスト取得
 class TimelineView(APIView):
     def get(self, request, *args, **kwargs):
-        instance = Questions.objects.select_related('user').all()
+        instance = Questions.objects.select_related('user').all().order_by('-created_at')
         serializer = QuestionsSerializer(instance, many=True)
         resp = {"questions": serializer.data}
         return Response(resp, status.HTTP_200_OK)
