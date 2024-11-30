@@ -14,6 +14,10 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
 
+    location /static/ {
+        root    ${STATIC_FILE_ROOT};
+    }
+
     #error_page  404              /404.html;
 
     # redirect server error pages to the static page /50x.html

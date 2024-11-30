@@ -163,7 +163,7 @@ export class WakarunCdkStack extends cdk.Stack {
 		});
 
 		backendTaskDefinition.addContainer('app', {
-			image: ecs.ContainerImage.fromEcrRepository(props.appRepo, 'v0.0.6'),
+			image: ecs.ContainerImage.fromEcrRepository(props.appRepo, 'latest'),
 			portMappings: [
 				{
 					containerPort: 8000,
@@ -173,6 +173,8 @@ export class WakarunCdkStack extends cdk.Stack {
 			environment: {
 				ALLOWED_HOST: '*',
 				DB_PORT: wakarunDbInstance.dbInstanceEndpointPort,
+                CORS_ALLOWED_ORIGINS:"localhost:3000",
+
 			},
 			secrets: {
 				DB_NAME: ecs.Secret.fromSecretsManager(secretManager, 'dbname'),
@@ -240,7 +242,7 @@ export class WakarunCdkStack extends cdk.Stack {
 		);
 
 		frontendTaskDefinition.addContainer('front', {
-			image: ecs.ContainerImage.fromEcrRepository(props.frontRepo, 'v0.0.1'),
+			image: ecs.ContainerImage.fromEcrRepository(props.frontRepo, 'latest'),
 			portMappings: [
 				{
 					containerPort: 3000,

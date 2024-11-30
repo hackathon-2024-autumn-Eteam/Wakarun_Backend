@@ -154,5 +154,7 @@ SIMPLE_JWT = {
 AUTH_USER_MODEL = 'API.CustomUser'
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # フロントエンドのURL
+ os.getenv('CORS_ALLOWED_ORIGINS','http://localhost:3000'),  # フロントエンドのURL
 ]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
