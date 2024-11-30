@@ -7,7 +7,7 @@ import { WakarunRepositoryStack } from '../lib/wakarun-cdk-repo-stack';
 const app = new cdk.App();
 // ECR
 const WakarunRepo = new WakarunRepositoryStack(app, 'WakarunRepositoryStack', {
-	env: { account: '961341549962', region: 'ap-northeast-1' },
+	env: { account: 'process.env.CDK_DEFAULT_ACCOUNT', region: 'process.env.CDK_DEFAULT_REGION' },
 });
 
 new WakarunCdkStack(app, 'WakarunCdkStack', {
@@ -15,7 +15,7 @@ new WakarunCdkStack(app, 'WakarunCdkStack', {
 	 * Account/Region-dependent features and context lookups will not work,
 	 * but a single synthesized template can be deployed anywhere. */
 
-	env: { account: '961341549962', region: 'ap-northeast-1' },
+	env: { account: 'process.env.CDK_DEFAULT_ACCOUNT', region: 'process.env.CDK_DEFAULT_REGION' },
 	/* Uncomment the next line to specialize this stack for the AWS Account
 	 * and Region that are implied by the current CLI configuration. */
 	// env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION },
